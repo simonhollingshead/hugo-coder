@@ -1,7 +1,7 @@
 <h{{ .Level }} id="{{ .Anchor | safeURL }}">
-  {{ .Text | safeHTML }}
+  {{ .Text | safeHTML }}{{ if not (strings.HasSuffix .Anchor "-nohl")  }}
   <a class="heading-link" href="#{{ .Anchor | safeURL }}">
     <i class="fa-solid fa-link" aria-hidden="true" title="{{ i18n "link_to_heading" | default "Link to heading" }}"></i>
     <span class="sr-only">{{ i18n "link_to_heading" | default "Link to heading" }}</span>
-  </a>
+  </a>{{ end }}
 </h{{ .Level }}>
