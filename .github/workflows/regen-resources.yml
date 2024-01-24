@@ -1,0 +1,49 @@
+name: Regenerate CSS Resources
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - patched
+  schedule:
+    - cron: '47 2 * * *'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-24.04
+    concurrency:
+      # Only ever run one at a time to avoid conflicting updates.
+      group: ${{ github.workflow }}
+      cancel-in-progress: true
+
+    steps:      
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: patched
+
+      - name: Install Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: latest
+          extended: true
+
+      - name: Remove Existing exampleSite Resources
+        run: rm -rf exampleSite/resources
+
+      - name: Build Example Site
+        working-directory: exampleSite
+        run: hugo --theme='../..'
+
+      - name: Replace Top-Level Resource Dir
+        run: |
+          rm -rf resources
+          cp -r exampleSite/resources resources
+
+      - name: Commit Back Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          branch: patched
+          file_pattern: 'resources/** exampleSite/resources/**'
+          commit_message: Regenerate CSS from SCSS
+          # push_options: --dry-run
