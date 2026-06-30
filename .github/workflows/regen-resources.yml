@@ -10,7 +10,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     concurrency:
       # Only ever run one at a time to avoid conflicting updates.
       group: ${{ github.workflow }}
