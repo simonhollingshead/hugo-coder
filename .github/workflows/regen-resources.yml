@@ -25,8 +25,8 @@ jobs:
       - name: Install Hugo
         uses: peaceiris/actions-hugo@d1c81a15d4e6dca7086a17b9c2565cb70fd576bf # v3.3.0
         with:
-          hugo-version: 0.169.0  # This should be 'latest' but 0.170.0 removes extended and requires SASS to be installed separately.
-          extended: true
+          hugo-version: latest
+          dart-sass-version: '1.108.2'
 
       - name: Remove Existing exampleSite Resources
         run: rm -rf exampleSite/resources
